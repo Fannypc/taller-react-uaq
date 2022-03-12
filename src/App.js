@@ -1,24 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import CustomHook from "./components/CustomHook";
+import Pokemon from "./components/Pokemon";
+import Hi, { Test as Meh } from "./components/test";
+import Counter from "./components/testHook";
+import TestUseCallback from "./components/TestUseCallback";
+import TestUseRef from "./components/TestUseRef";
 
 function App() {
+  const [list, setList] = useState(["manzana", "sandia"]);
+
+  const change = () => {
+    let temp = [...list];
+    temp.push("nuevo");
+    return temp;
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <div className="red">Desde App</div>
+      <Pokemon pokemon={{ name: "pikachu", power: 0 }} />
+      <Hi />
+      <Meh />
+      <Counter />
+      <TestUseCallback userId={1} />
+      <TestUseRef />
+      <CustomHook />
+    </>
   );
 }
 
