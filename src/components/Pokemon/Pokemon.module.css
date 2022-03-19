@@ -6,13 +6,7 @@
 }
 
 .card {
-  border: 5px solid rgb(111, 178, 233);
-  margin: 2rem;
-  width: 200px;
-  text-align: center;
-  padding: 1rem;
-  border-radius: 1rem;
-  box-shadow: 18px 14px gray;
+  /* min-height: 15rem; */
 }
 
 .btn {
