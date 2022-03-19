@@ -15,7 +15,12 @@ function CallbackHook(props) {
     fetchUser();
   }, [fetchUser]); // ✅ fetchUser stays the same between renders
 
-  return <h1>{JSON.stringify(user)}</h1>;
+  return (
+    <>
+      <span>{JSON.stringify(user)}</span>
+      <br />
+    </>
+  );
 }
 
 export default CallbackHook;

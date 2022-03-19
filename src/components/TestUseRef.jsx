@@ -14,7 +14,7 @@ function UseRefHook() {
   return (
     <>
       <input type="text" ref={inputRef} />
-      <button onClick={imprimirValor}>clock</button>
+      <button onClick={imprimirValor}>click</button>
     </>
   );
 }
