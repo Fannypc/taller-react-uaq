@@ -1,22 +1,32 @@
 import User from "./components/User";
 import { Container, Button, Row, Col, Form } from "react-bootstrap";
-import { PokemonList } from "./PokemonList";
+import ShowModal from "./components/Modal";
 import "./App.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
 function App() {
-  const [users, setUsers] = useState([]);
-  const [backUpUsers, setBackUpUsers] = useState([]);
+  const [pokemons, setPokemons] = useState([]);
+  const [backUpPokemons, setBackUpPokemons] = useState([]);
+
+  const fetchPokemons = async () => {
+    const response = await axios.get(
+      "https://hidden-plains-73441.herokuapp.com/api/v1/pokemons"
+    );
+    // console.log("response", response.data);
+    setPokemons(response.data);
+    setBackUpPokemons(response.data);
+  };
 
   useEffect(() => {
     try {
       let fetchUsers = async function () {
         const response = await axios.get(
-          "https://reqres.in/api/users?per_page=12"
+          "https://hidden-plains-73441.herokuapp.com/api/v1/pokemons"
         );
-        setUsers(response.data.data);
-        setBackUpUsers(response.data.data);
+        // console.log("response", response.data);
+        setPokemons(response.data);
+        setBackUpPokemons(response.data);
       };
       fetchUsers();
     } catch (err) {
@@ -24,15 +34,14 @@ function App() {
     }
   }, []);
 
-  const buscarUsuario = function (event) {
-    let usersArray = [...backUpUsers];
-    usersArray = usersArray.filter((user) => {
-      let full_name = `${user.first_name} ${user.last_name}`;
+  const buscarPokemon = function (event) {
+    let pokemonsArray = [...backUpPokemons];
+    pokemonsArray = pokemonsArray.filter((user) => {
       return (
-        full_name.toLowerCase().search(event.target.value.toLowerCase()) !== -1
+        user.name.toLowerCase().search(event.target.value.toLowerCase()) !== -1
       );
     });
-    setUsers(usersArray);
+    setPokemons(pokemonsArray);
   };
 
   return (
@@ -40,21 +49,22 @@ function App() {
       <Form>
         <Row>
           <Col xs={2} className="d-flex justify-content-end">
-            <Form.Label>Buscar un ususssario:</Form.Label>
+            <Form.Label>Buscar un Pokemon:</Form.Label>
           </Col>
           <Col xs={10}>
             <Form.Control
               type="text"
               placeholder="Ingresa el nombre"
-              onChange={buscarUsuario}
+              onChange={buscarPokemon}
             />
           </Col>
         </Row>
       </Form>
       <Row>
         <Col>
+          <ShowModal fetchPokemons={fetchPokemons} />
           <div className="pokemon-container m-5">
-            {users.map((user) => {
+            {pokemons.map((user) => {
               return <User key={user.id} user={user} />;
             })}
           </div>

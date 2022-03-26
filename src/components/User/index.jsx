@@ -10,12 +10,15 @@ function User(props) {
         <p>
           <strong>Name:</strong>
         </p>
-        <p>{`${user.first_name} ${user.last_name}`}</p>
+        <p>{`${user.name}`}</p>
         <p>
-          <strong>Email:</strong>
+          <strong>Base Experience:</strong>
         </p>
-        <p>{`${user.email}`}</p>
-        <img src={`${user.avatar}`} alt="user-face" />
+        <p>{`${user.base_experience}`}</p>
+        <p>
+          <strong>Height:</strong>
+        </p>
+        <p>{`${user.height}`}</p>
       </Card.Body>
     </Card>
   );
