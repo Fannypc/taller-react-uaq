@@ -17,7 +17,6 @@ function ShowModal(props) {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-      console.log(formData);
       await axios.post(
         "https://hidden-plains-73441.herokuapp.com/api/v1/pokemons",
         formData
@@ -95,14 +94,6 @@ function ShowModal(props) {
             </Button>
           </Form>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleClose}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
       </Modal>
     </>
   );
