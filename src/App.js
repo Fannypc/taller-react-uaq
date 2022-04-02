@@ -1,36 +1,27 @@
 import Pokemon from "./components/Pokemon";
 import { Container, Row, Col, Form } from "react-bootstrap";
-import ShowModal from "./components/CreateModal";
+import ShowModal from "./components/Modal";
 import "./App.css";
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useState, useEffect, useCallback } from "react";
+import axios from "./utils/axios";
 
 function App() {
   const [pokemons, setPokemons] = useState([]);
   const [backUpPokemons, setBackUpPokemons] = useState([]);
 
-  const fetchPokemons = async () => {
-    const response = await axios.get(
-      "https://hidden-plains-73441.herokuapp.com/api/v1/pokemons"
-    );
+  const fetchPokemons = useCallback(async () => {
+    const response = await axios.get("/pokemons");
     setPokemons(response.data);
     setBackUpPokemons(response.data);
-  };
+  }, []);
 
   useEffect(() => {
     try {
-      let fetchUsers = async function () {
-        const response = await axios.get(
-          "https://hidden-plains-73441.herokuapp.com/api/v1/pokemons"
-        );
-        setPokemons(response.data);
-        setBackUpPokemons(response.data);
-      };
-      fetchUsers();
+      fetchPokemons();
     } catch (err) {
       console.log(err);
     }
-  }, []);
+  }, [fetchPokemons]);
 
   const buscarPokemon = function (event) {
     let pokemonsArray = [...backUpPokemons];
@@ -46,7 +37,7 @@ function App() {
     <Container className="mt-5">
       <Form>
         <Row>
-          <Col xs={2} className="d-flex justify-content-end">
+          <Col xs={2} className="d-flex justify-content-end white-text">
             <Form.Label>Buscar un Pokemon:</Form.Label>
           </Col>
           <Col xs={8}>
@@ -57,24 +48,24 @@ function App() {
             />
           </Col>
           <Col xs={2}>
-            <ShowModal fetchPokemons={fetchPokemons} />
+            <ShowModal type={"create"} fetchPokemons={fetchPokemons} />
           </Col>
         </Row>
       </Form>
       <Row>
-        <Col>
-          <div className="pokemon-container m-5">
-            {pokemons.map((pokemon) => {
-              return (
+        <div className="pokemon-container m-5">
+          {pokemons.map((pokemon) => {
+            return (
+              <Col>
                 <Pokemon
                   key={pokemon.id}
                   pokemon={pokemon}
                   fetchPokemons={fetchPokemons}
                 />
-              );
-            })}
-          </div>
-        </Col>
+              </Col>
+            );
+          })}
+        </div>
       </Row>
     </Container>
   );

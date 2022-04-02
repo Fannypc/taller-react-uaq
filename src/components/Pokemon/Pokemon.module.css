@@ -6,7 +6,7 @@
 }
 
 .card {
-  /* min-height: 15rem; */
+  min-height: 25rem;
 }
 
 .btn {
@@ -16,6 +16,10 @@
   padding: 14px 28px;
   font-size: 16px;
   cursor: pointer;
+}
+
+.pokemonImg {
+  min-height: 128px;
 }
 
 /* Green */

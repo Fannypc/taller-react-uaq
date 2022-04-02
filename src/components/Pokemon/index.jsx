@@ -1,16 +1,12 @@
-import styles from "./User.module.css";
+import styles from "./Pokemon.module.css";
 import { Card, Button } from "react-bootstrap";
-import UpdateModal from "../UpdateModal";
-import axios from "axios";
+import axios from "../../utils/axios";
+import ShowModal from "../Modal";
 
-function Pokemon(props) {
-  const { pokemon, fetchPokemons, showModal } = props;
-
+function Pokemon({ pokemon, fetchPokemons }) {
   const deletePokemon = async () => {
-    await axios.delete(
-      `https://hidden-plains-73441.herokuapp.com/api/v1/pokemons/${pokemon.id}`
-    );
-    props.fetchPokemons();
+    await axios.delete(`/pokemons/${pokemon.id}`);
+    fetchPokemons();
     alert("Se ha eliminado el pokemon exitosamente!");
   };
 
@@ -18,19 +14,28 @@ function Pokemon(props) {
     <Card>
       <Card.Body className={`${styles.card} m-5 text-center`}>
         <p>
-          <strong>Name:</strong>
+          <strong>Name: </strong>
+          {`${pokemon.name}`}
         </p>
-        <p>{`${pokemon.name}`}</p>
         <p>
-          <strong>Base Experience:</strong>
+          <strong>Base Experience: </strong>
+          {`${pokemon.base_experience}`}
         </p>
-        <p>{`${pokemon.base_experience}`}</p>
         <p>
-          <strong>Height:</strong>
+          <strong>Height: </strong> {`${pokemon.height}`}
         </p>
-        <p>{`${pokemon.height}`}</p>
+        <p>
+          <strong>Weight: </strong> {`${pokemon.weight}`}
+        </p>
+        <div className={`mb-5 ${styles.pokemonImg}`}>
+          <img src={pokemon.sprite} alt="pokemon-img" />
+        </div>
         <div className={`${styles.actionsContainer}`}>
-          <UpdateModal pokemon={pokemon} fetchPokemons={fetchPokemons} />
+          <ShowModal
+            pokemon={pokemon}
+            type={"update"}
+            fetchPokemons={fetchPokemons}
+          />
           <Button variant="danger" onClick={deletePokemon}>
             Danger
           </Button>
