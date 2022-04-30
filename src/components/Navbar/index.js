@@ -6,9 +6,8 @@ import { useDispatch } from "react-redux";
 
 function NavbarApp() {
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state);
+  const { data: user } = useSelector((state) => state.user);
   const logout = () => {
-    console.log("dentro de logout");
     dispatch(doLogout());
   };
 
