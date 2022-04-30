@@ -1,30 +1,45 @@
-import { useState } from "react";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import { Container, Row, Card, Form, Button, Col } from "react-bootstrap";
 import "../../App.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { loginUser, registerUser } from "../../store/actions/authActions";
+import {
+  loginUser,
+  registerUser,
+  clearError,
+} from "../../store/actions/authActions";
 import ErrorHandler from "../../utils/errorHandler";
 
 function Login({ type }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { data: user, error } = useSelector((state) => state.user);
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
   });
 
-  const handleSubmit = async (e) => {
-    try {
-      e.preventDefault();
-      dispatch(type === "Login" ? loginUser(formData) : registerUser(formData));
+  useEffect(() => {
+    if (user) {
       navigate("/");
-    } catch (err) {
-      ErrorHandler(err);
     }
+  }, [user, navigate]);
+
+  useEffect(() => {
+    if (error) {
+      ErrorHandler(error);
+      dispatch(clearError());
+    }
+  }, [error, dispatch]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    dispatch(type === "Login" ? loginUser(formData) : registerUser(formData));
   };
+
   const handleChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
@@ -49,15 +64,17 @@ function Login({ type }) {
                   />
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                  <Form.Label>Email address</Form.Label>
-                  <Form.Control
-                    type="email"
-                    name="email"
-                    placeholder="Enter email"
-                    onChange={handleChange}
-                  />
-                </Form.Group>
+                {type === "Register" && (
+                  <Form.Group className="mb-3" controlId="formBasicEmail">
+                    <Form.Label>Email address</Form.Label>
+                    <Form.Control
+                      type="email"
+                      name="email"
+                      placeholder="Enter email"
+                      onChange={handleChange}
+                    />
+                  </Form.Group>
+                )}
 
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                   <Form.Label>Password</Form.Label>
@@ -69,7 +86,14 @@ function Login({ type }) {
                   />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                  <Link to="/register">Crear una cuenta</Link>
+                  {type === "Login" ? (
+                    <Link to="/register">Crear una cuenta</Link>
+                  ) : (
+                    <p>
+                      Ya tienes una cuenta?{" "}
+                      <Link to="/login">Inicia Sesión</Link>
+                    </p>
+                  )}
                 </Form.Group>
                 <Button variant="primary" type="submit">
                   Submit

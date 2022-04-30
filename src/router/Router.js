@@ -7,6 +7,7 @@ import Bank from "../pages/Bank";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import AuthRoute from "./AuthRoute";
+import NonAuthRoute from "./NonAuthRoute";
 
 function Router() {
   return (
@@ -31,8 +32,22 @@ function Router() {
             }
           />
           <Route path="/counter" element={<Bank />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route
+            path="/login"
+            element={
+              <NonAuthRoute>
+                <Login />
+              </NonAuthRoute>
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <NonAuthRoute>
+                <Register />
+              </NonAuthRoute>
+            }
+          />
         </Route>
       </Routes>
     </BrowserRouter>

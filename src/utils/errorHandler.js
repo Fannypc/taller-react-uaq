@@ -1,10 +1,6 @@
-/* eslint-disable no-console */
 import Swal from "sweetalert2";
 
-function ErrorHandler(err, title = "", text = null) {
-  console.log(err);
-  if (text === null) text = err.reason;
-
+function ErrorHandler(title = "", text = null) {
   Swal.fire({
     title: title || "Something went wrong",
     text,

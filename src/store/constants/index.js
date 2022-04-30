@@ -8,4 +8,6 @@ export const ActionTypes = {
   ADD_POKEMON: "ADD_POKEMON",
   SET_USER: "SET_USER",
   LOGOUT: "LOGOUT",
+  SET_ERROR: "SET_ERROR",
+  CLEAR_ERROR: "CLEAR_ERROR",
 };

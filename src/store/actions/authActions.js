@@ -14,27 +14,51 @@ export const logoutUser = () => {
   };
 };
 
+export const setError = (err) => {
+  return {
+    type: ActionTypes.SET_ERROR,
+    payload: err,
+  };
+};
+
+export const clearError = () => {
+  return {
+    type: ActionTypes.CLEAR_ERROR,
+  };
+};
+
 export const loginUser = (info) => {
   return async (dispatch) => {
-    const { data } = await login(info);
-    window.localStorage.setItem("token", data.token);
-    dispatch(setUser(data));
+    try {
+      const { data } = await login(info);
+      window.localStorage.setItem("token", data.token);
+      dispatch(setUser(data));
+    } catch (err) {
+      dispatch(setError(err.response?.data?.message || "Something went wrong"));
+    }
   };
 };
 
 export const registerUser = (info) => {
   return async (dispatch) => {
-    const { data } = await register(info);
-    window.localStorage.setItem("token", data.token);
-    dispatch(setUser(data));
+    try {
+      const { data } = await register(info);
+      window.localStorage.setItem("token", data.token);
+      dispatch(setUser(data));
+    } catch (err) {
+      dispatch(setError(err.response?.data?.message || "Something went wrong"));
+    }
   };
 };
 
 export const doLogout = () => {
   return async (dispatch) => {
-    await logout();
-    console.log("dentro del action para logout");
-    window.localStorage.clear();
-    dispatch(logoutUser());
+    try {
+      await logout();
+      window.localStorage.clear();
+      dispatch(logoutUser());
+    } catch (err) {
+      dispatch(setError(err.response?.data?.message || "Something went wrong"));
+    }
   };
 };
