@@ -2,25 +2,40 @@ import Form from "../../components/Form";
 import { Card, Container, Row, Col } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "../../utils/axios";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchPokemon,
+  updatePokemon,
+} from "../../store/actions/pokemonActions";
 
 function UpdatePokemon() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   let { id } = useParams();
-  const [formData, setFormData] = useState({});
+  const { selectedPokemon: pokemon } = useSelector((state) => state.pokemons);
+  const [formData, setFormData] = useState({
+    name: "",
+    base_experience: "",
+    height: "",
+    weight: "",
+    sprite: "",
+  });
 
   useEffect(() => {
-    const fetchPokemons = async () => {
-      const response = await axios.get(`/pokemons/${id}`);
-      setFormData(response.data);
-    };
-    fetchPokemons();
-  }, [id]);
+    dispatch(fetchPokemon(id));
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    if (pokemon) {
+      delete pokemon.id;
+      setFormData(pokemon);
+    }
+  }, [pokemon]);
 
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-      await axios.put(`/pokemons/${id}`, formData);
+      dispatch(updatePokemon(id, formData));
       navigate("/");
     } catch (err) {
       console.log(err);

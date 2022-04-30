@@ -1,37 +1,30 @@
 import Pokemon from "../../components/Pokemon";
 import { Container, Row, Col, Form } from "react-bootstrap";
-import ShowModal from "../../components/Modal";
 import "../../App.css";
-import { useState, useEffect, useCallback } from "react";
-import axios from "../../utils/axios";
-import Navbar from "../../components/Navbar";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchPokemons } from "../../store/actions/pokemonActions";
 
 function App() {
-  const [pokemons, setPokemons] = useState([]);
-  const [backUpPokemons, setBackUpPokemons] = useState([]);
-
-  const fetchPokemons = useCallback(async () => {
-    const response = await axios.get("/pokemons");
-    setPokemons(response.data);
-    setBackUpPokemons(response.data);
-  }, []);
+  const dispatch = useDispatch();
+  const { list: pokemons } = useSelector((state) => state.pokemons);
 
   useEffect(() => {
     try {
-      fetchPokemons();
+      dispatch(fetchPokemons());
     } catch (err) {
       console.log(err);
     }
-  }, [fetchPokemons]);
+  }, [dispatch]);
 
-  const buscarPokemon = function (event) {
-    let pokemonsArray = [...backUpPokemons];
-    pokemonsArray = pokemonsArray.filter((user) => {
-      return (
-        user.name.toLowerCase().search(event.target.value.toLowerCase()) !== -1
-      );
-    });
-    setPokemons(pokemonsArray);
+  const debounce = (callback, wait) => {
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        callback(...args);
+      }, wait);
+    };
   };
 
   return (
@@ -46,7 +39,11 @@ function App() {
               <Form.Control
                 type="text"
                 placeholder="Ingresa el nombre"
-                onChange={buscarPokemon}
+                name="name"
+                onKeyUp={debounce(function (e) {
+                  const filter = { [e.target.name]: e.target.value.trim() };
+                  dispatch(fetchPokemons(filter));
+                }, 500)}
               />
             </Col>
           </Row>
@@ -55,12 +52,8 @@ function App() {
           <div className="pokemon-container m-5">
             {pokemons.map((pokemon) => {
               return (
-                <Col>
-                  <Pokemon
-                    key={pokemon.id}
-                    pokemon={pokemon}
-                    fetchPokemons={fetchPokemons}
-                  />
+                <Col key={pokemon.id}>
+                  <Pokemon pokemon={pokemon} />
                 </Col>
               );
             })}

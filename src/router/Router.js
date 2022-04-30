@@ -3,6 +3,7 @@ import Dashboard from "../pages/Dashboard";
 import CreatePokemon from "../pages/Create";
 import UpdatePokemon from "../pages/Update";
 import Base from "../pages/index";
+import Bank from "../pages/Bank";
 
 function Router() {
   return (
@@ -12,6 +13,7 @@ function Router() {
           <Route index element={<Dashboard />} />
           <Route path="/crear" element={<CreatePokemon />} />
           <Route path="/actualizar/:id" element={<UpdatePokemon />} />
+          <Route path="/counter" element={<Bank />} />
         </Route>
       </Routes>
     </BrowserRouter>
