@@ -6,7 +6,7 @@ function NavbarApp() {
     <Navbar bg="light" expand="lg">
       <Container>
         <NavLink to="/" className="navbar navbar-brand">
-          PokeAPI
+          PokeAPI!
         </NavLink>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
